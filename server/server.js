@@ -11,13 +11,11 @@ var io = socketIO(server)
 
 app.use(express.static(publicPath));
 
-
-// allows us to register an event listener
-// connection -the most populat built-in event
-//socket argument is similiar to the one we use in index.html
-// represents the individual socket, as opposed to all the users connected to the server
 io.on('connection', (socket) => {
     console.log('New user connected');
+    socket.on('disconnect', () => {
+        console.log('Client disconnected from server');
+    });
 });
 
 server.listen(port, () => {
