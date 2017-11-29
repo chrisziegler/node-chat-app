@@ -12,15 +12,6 @@
     <script src ="/socket.io/socket.io.js"></script>
     <!-- creates a connection, stores it in a variable, and keeps it open -->
     <!-- using a method available on the library we loaded-in above -->
-    <script>
-        var socket = io();
-        socket.on('connect', () => {
-            console.log('Connected to server');
-        });
-        
-        socket.on('disconnect', () => {
-            console.log('Disconnected from server');
-        })
-    </script>
+    <script src="/js/index.js"></script>
 </body>
 </html>
