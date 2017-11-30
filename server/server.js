@@ -20,11 +20,15 @@ io.on('connection', (socket) => {
     createdAt: 123
   });
 
+  socket.on('createEmail', (newEmail) => {
+    console.log('createEmail', newEmail);
+  });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected from server');
   });
 });
 
 server.listen(port, () => {
-  console.log(`Server is running on PORT ${port}`)
-})
+  console.log(`Server is running on PORT ${port}`);
+});

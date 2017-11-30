@@ -8,12 +8,22 @@
       "browser": true,
       "es6": true
   },
+  "globals": {
+    "io": false
+  },
   "rules": {
       "linebreak-style": 0,
+      "no-console": "off",
+      "no-unused-vars": [
+        "warn",
+        {
+            "vars": "local",
+            "args": "none"
+        }
+    ],
       "comma-dangle": [
           "error",
           "never"
-      ],
-      "react/jsx-filename-extension": 0
+      ]
   }
 }
