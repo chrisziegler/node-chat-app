@@ -20,8 +20,18 @@ io.on('connection', (socket) => {
     createdAt: 123
   });
 
-  socket.on('createEmail', (newEmail) => {
-    console.log('createEmail', newEmail);
+  socket.emit('newMessage', {
+    from: 'adminstrator@example.com',
+    text: 'You have a new message!',
+    createdAt: 456
+  });
+
+  socket.on('createEmail', (email) => {
+    console.log('createEmail', email);
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('createMessage', message);
   });
 
   socket.on('disconnect', () => {
