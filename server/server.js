@@ -11,6 +11,8 @@ const io = socketIO(server);
 
 app.use(express.static(publicPath));
 
+// socketIO has been passed the server
+// call on method to establish the connection and wrap events
 io.on('connection', (socket) => {
   console.log('New user connected');
 
@@ -25,15 +27,16 @@ io.on('connection', (socket) => {
     text: 'You have a new message!',
     createdAt: 456
   });
-
+  // custom listener
   socket.on('createEmail', (email) => {
     console.log('createEmail', email);
   });
-
+  // custom listener
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
   });
 
+  // built-in listener
   socket.on('disconnect', () => {
     console.log('Client disconnected from server');
   });
