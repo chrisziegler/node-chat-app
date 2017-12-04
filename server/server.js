@@ -21,10 +21,11 @@ io.on('connection', (socket) => {
   // it receives this event from a single client
   // and emits it to everyone including the initiator as a confirmation/posting for forum
   // need to emit this event from client dev console until html form input
-  socket.on('createMessage', (message) => {
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     // message to everyone including initiator
     io.emit('newMessage', generateMessage(message.from, message.text));
+    callback('this is from the server');
   //   socket.broadcast.emit('newMessage', {
   //     from: message.from,
   //     text: message.text,
