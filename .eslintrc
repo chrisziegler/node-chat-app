@@ -21,9 +21,11 @@
             "args": "none"
         }
     ],
+      "no-undef": 1,
       "comma-dangle": [
           "error",
           "never"
       ]
+    //   "arrow-body-style": 0
   }
 }
