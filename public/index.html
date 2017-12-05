@@ -7,11 +7,18 @@
     <title>Document</title>
 </head>
 <body>
+    <ol id="messages"></ol>
     <p>Welcome to the Chat App</p>
+    <form id="message-form">
+        <input name="message" type="text" placeholder="Message"/>
+        <button>Send</button>
+    </form>
+
     <!-- path relative to our server -->
     <script src ="/socket.io/socket.io.js"></script>
     <!-- creates a connection, stores it in a variable, and keeps it open -->
     <!-- using a method available on the library we loaded-in above -->
+    <script src="/js/libs/jquery-3.2.1.min.js"></script>
     <script src="/js/index.js"></script>
 </body>
 </html>
