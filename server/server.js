@@ -2,7 +2,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketIO = require('socket.io');
-const { generateMessage } = require('./utils/message');
+const { generateMessage, generateLocationMessage } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
   // and emits it to everyone including the initiator as a confirmation/posting for forum
   // need to emit this event from client dev console until html form input
   socket.on('createMessage', (message, callback) => {
-    console.log('createMessage', message);
+    // console.log('createMessage', message);
     // message to everyone including initiator
     io.emit('newMessage', generateMessage(message.from, message.text));
     callback('this is from the server');
@@ -31,6 +31,10 @@ io.on('connection', (socket) => {
   //     text: message.text,
   //     createdAt: new Date().getTime()
   //   });
+  });
+
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
   });
 
   socket.on('disconnect', () => {

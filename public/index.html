@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
 <body>
-    <ol id="messages"></ol>
-    <p>Welcome to the Chat App</p>
-    <form id="message-form">
-        <input name="message" type="text" placeholder="Message"/>
-        <button>Send</button>
-    </form>
-
-    <!-- path relative to our server -->
-    <script src ="/socket.io/socket.io.js"></script>
-    <!-- creates a connection, stores it in a variable, and keeps it open -->
-    <!-- using a method available on the library we loaded-in above -->
-    <script src="/js/libs/jquery-3.2.1.min.js"></script>
-    <script src="/js/index.js"></script>
+  <ol id="messages"></ol>
+  <p>Welcome to the Chat App</p>
+  <form id="message-form">
+      <input name="message" type="text" placeholder="Message"/>
+      <button>Send</button>
+  </form>
+  <button id="send-location">Send Location</button>
+  
+  <!-- path relative to our server -->
+  <!-- http://localhost:3000/socket.io/socket.io.js -->
+  <!-- library at that location provided when we integrated socket.io with server -->
+  <script src ="/socket.io/socket.io.js"></script>
+  <!-- creates a connection, stores it in a variable, and keeps it open -->
+  <!-- using a method available on the library we loaded-in above -->
+  <script src="/js/libs/jquery-3.2.1.min.js"></script>
+  <script src="/js/index.js"></script>
 </body>
 </html>

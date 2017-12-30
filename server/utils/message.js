@@ -3,5 +3,11 @@ const generateMessage = (from, text) => {
   return { from, text, createdAt };
 };
 
-module.exports = { generateMessage };
+const generateLocationMessage = (from, lat, lng) => {
+  const createdAt = new Date().getTime();
+  const url = `https://www.google.com/maps?q=${lat},${lng}`
+  return { from, url, createdAt };
+};
+
+module.exports = { generateMessage, generateLocationMessage };
 
