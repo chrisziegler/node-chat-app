@@ -1,7 +1,7 @@
 /* global describe, it */
 
 const expect = require('expect');
-const { generateMessage } = require('./message');
+const { generateMessage, generateLocationMessage } = require('./message');
 
 describe('generateMessage', () => {
   it('should generate the correct message object', () => {
@@ -13,3 +13,17 @@ describe('generateMessage', () => {
   });
 });
 
+// a synchronous test, no need to add 'done' argument
+describe('generateLocationMessage', () => {
+  it('should generate correct location object', () => {
+    const from = 'User';
+    const lat = 10;
+    const lng = 42;
+    const url = 'https://www.google.com/maps?q=10,42';
+    const res = generateLocationMessage(from, lat, lng);
+    expect(res).toMatchObject({ from, url });
+    expect(typeof res.createdAt).toBe('number');
+    expect(res.from).toBe('User');
+    expect(res.url).toBe(url);
+  });
+});

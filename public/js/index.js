@@ -19,6 +19,7 @@ socket.on('newLocationMessage', function (message) {
   // console.log('newLocationMessage', message);
   // will change later to use different system for rendering
   const li = $('<li></li>');
+  // if we open google map in same window will disconnect from chat room
   const a = $('<a target="_blank">My current location</a>');
   // to avoid user injecting html - dont simply add all these dynamic values in template strings
   // instead set them  using these save methods like li.text, a.attr
