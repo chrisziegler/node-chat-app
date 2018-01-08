@@ -9,20 +9,22 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a');
   const li = $('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from}: ${formattedTime}: ${message.text}`);
   $('#messages').append(li)
 });
 
 socket.on('newLocationMessage', function (message) {
   // console.log('newLocationMessage', message);
   // will change later to use different system for rendering
+  const formattedTime = moment(message.createdAt).format('h:mm a');
   const li = $('<li></li>');
   // if we open google map in same window will disconnect from chat room
   const a = $('<a target="_blank">My current location</a>');
   // to avoid user injecting html - dont simply add all these dynamic values in template strings
   // instead set them  using these save methods like li.text, a.attr
-  li.text(`${message.from}: `);
+  li.text(`${message.from}: ${formattedTime}:`);
   // you can set and fetch attributes on jQuery selected elements using this method
   // 1 argument fetches value (returns a string), 2 sets attribute
   a.attr('href', message.url);
