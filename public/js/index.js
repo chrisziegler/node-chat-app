@@ -9,28 +9,26 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (message) {
+  const template = jQuery('#message-template').html();
   const formattedTime = moment(message.createdAt).format('h:mm a');
-  const li = $('<li></li>');
-  li.text(`${message.from}: ${formattedTime}: ${message.text}`);
-  $('#messages').append(li)
+  const html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
+  jQuery('#messages').append(html);
 });
 
 socket.on('newLocationMessage', function (message) {
-  // console.log('newLocationMessage', message);
-  // will change later to use different system for rendering
+  const template = jQuery('#location-message-template').html();
   const formattedTime = moment(message.createdAt).format('h:mm a');
-  const li = $('<li></li>');
-  // if we open google map in same window will disconnect from chat room
-  const a = $('<a target="_blank">My current location</a>');
-  // to avoid user injecting html - dont simply add all these dynamic values in template strings
-  // instead set them  using these save methods like li.text, a.attr
-  li.text(`${message.from}: ${formattedTime}:`);
-  // you can set and fetch attributes on jQuery selected elements using this method
-  // 1 argument fetches value (returns a string), 2 sets attribute
-  a.attr('href', message.url);
-  li.append(a);
-  $('#messages').append(li);
-})
+  const html = Mustache.render(template, {
+    from: message.from,
+    createdAt: formattedTime,
+    url: message.url
+  });
+  jQuery('#messages').append(html);
+});
 
 /* On Submit Listener */
 const messageTextbox = jQuery('[name=message]');
@@ -40,8 +38,6 @@ $('#message-form').on('submit', function (e) {
     from: 'User',
     text: messageTextbox.val()
   }, function () {
-    //added this call back to clear form input
-    // we don't actually need any data, just to know when server responds w/callback
    messageTextbox.val('')
   });
 });
