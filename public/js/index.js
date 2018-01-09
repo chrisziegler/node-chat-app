@@ -1,4 +1,23 @@
 /* eslint-disable */
+
+function scrollToBottom() {
+// Selectors
+const messages = $('#messages');
+const newMessage = messages.children('li:last-child');
+// Heights (prop is a jQuery cross-browser method)
+const clientHeight = messages.prop('clientHeight');
+const scrollTop = messages.prop('scrollTop');
+const scrollHeight = messages.prop('scrollHeight');
+const newMessageHeight = newMessage.innerHeight();
+const lastMessageHeight = newMessage.prev().innerHeight();
+
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    //scrollTop() is the jQuery method for scrolling. scollHeight is the total container
+    //so this will scroll all messages to top.
+    messages.scrollTop(scrollHeight)
+  }
+}
+
 const socket = io();
 socket.on('connect', function () {
   console.log('Connected to server');
@@ -17,6 +36,7 @@ socket.on('newMessage', function (message) {
     createdAt: formattedTime
   });
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 socket.on('newLocationMessage', function (message) {
@@ -28,6 +48,7 @@ socket.on('newLocationMessage', function (message) {
     url: message.url
   });
   jQuery('#messages').append(html);
+  scrollToBottom()
 });
 
 /* On Submit Listener */
