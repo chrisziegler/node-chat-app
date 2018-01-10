@@ -1,10 +1,9 @@
 /* eslint-disable */
+const socket = io();
 
 function scrollToBottom() {
-// Selectors
 const messages = $('#messages');
 const newMessage = messages.children('li:last-child');
-// Heights (prop is a jQuery cross-browser method)
 const clientHeight = messages.prop('clientHeight');
 const scrollTop = messages.prop('scrollTop');
 const scrollHeight = messages.prop('scrollHeight');
@@ -12,15 +11,26 @@ const newMessageHeight = newMessage.innerHeight();
 const lastMessageHeight = newMessage.prev().innerHeight();
 
   if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
-    //scrollTop() is the jQuery method for scrolling. scollHeight is the total container
-    //so this will scroll all messages to top.
     messages.scrollTop(scrollHeight)
   }
 }
 
-const socket = io();
 socket.on('connect', function () {
-  console.log('Connected to server');
+  // console.log('Connected to server');
+  const params = jQuery.deparam(window.location.search);
+  // the event that we emit is a custom event
+  // socket does have a concept of rooms, and that all takes place on the server
+  // emitted by the client, and listened to by the server
+  // when server hears event it's going to go through process of setting-up a room
+  socket.emit('join', params, function(err) {
+    if (err) {
+      alert(err);
+      // send them back to root page (index.html)
+      window.location.href = '/';
+    } else {
+      console.log('no error')
+    }
+  })
 });
 
 socket.on('disconnect', function () {

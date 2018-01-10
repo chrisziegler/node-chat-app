@@ -3,6 +3,7 @@ const http = require('http');
 const path = require('path');
 const socketIO = require('socket.io');
 const { generateMessage, generateLocationMessage } = require('./utils/message');
+const { isRealString } = require('./utils/validation');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -15,14 +16,18 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
   socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Chat App!'));
-
+  // broadcast to everyone on the connection but initiator
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user just joined the room'));
+  // listen for the client setting up room event
+  socket.on('join', (params, callback) => {
+  // created validation function in utils
+    if (!isRealString(params.name) || !isRealString(params.room)) {
+      callback('Name and room name are required');
+    }
+    callback();
+  });
   // our listener for the client createMessage event
-  // it receives this event from a single client
-  // and emits it to everyone including the initiator as a confirmation/posting for forum
-  // need to emit this event from client dev console until html form input
   socket.on('createMessage', (message, callback) => {
-    // console.log('createMessage', message);
     // message to everyone including initiator
     io.emit('newMessage', generateMessage(message.from, message.text));
     callback();
