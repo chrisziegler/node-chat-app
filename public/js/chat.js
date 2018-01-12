@@ -21,7 +21,6 @@ socket.on('connect', function () {
   socket.emit('join', params, function(err) {
     if (err) {
       alert(err);
-      // send them back to root page (index.html)
       window.location.href = '/';
     } else {
       console.log('no error')
@@ -34,13 +33,10 @@ socket.on('disconnect', function () {
 });
 
 socket.on('updateUserList', function(users) {
-  // console.log('Users list:', users);
   const ol = jQuery('<ol></ol>');
-
   users.forEach(function(user) {
     ol.append(jQuery('<li></li>').text(user))
   });
-  // we don't want to append the list, but update it with the new version
   jQuery('#users').html(ol);
 });
 
@@ -73,7 +69,6 @@ const messageTextbox = jQuery('[name=message]');
 $('#message-form').on('submit', function (e) {
   e.preventDefault();
   socket.emit('createMessage', {
-    from: 'User',
     text: messageTextbox.val()
   }, function () {
    messageTextbox.val('')
