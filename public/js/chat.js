@@ -16,12 +16,8 @@ const lastMessageHeight = newMessage.prev().innerHeight();
 }
 
 socket.on('connect', function () {
-  // console.log('Connected to server');
   const params = jQuery.deparam(window.location.search);
-  // the event that we emit is a custom event
-  // socket does have a concept of rooms, and that all takes place on the server
-  // emitted by the client, and listened to by the server
-  // when server hears event it's going to go through process of setting-up a room
+
   socket.emit('join', params, function(err) {
     if (err) {
       alert(err);
@@ -30,11 +26,22 @@ socket.on('connect', function () {
     } else {
       console.log('no error')
     }
-  })
+  });
 });
 
 socket.on('disconnect', function () {
   console.log('Disconnected from server');
+});
+
+socket.on('updateUserList', function(users) {
+  // console.log('Users list:', users);
+  const ol = jQuery('<ol></ol>');
+
+  users.forEach(function(user) {
+    ol.append(jQuery('<li></li>').text(user))
+  });
+  // we don't want to append the list, but update it with the new version
+  jQuery('#users').html(ol);
 });
 
 socket.on('newMessage', function (message) {

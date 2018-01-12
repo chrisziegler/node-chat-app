@@ -4,26 +4,32 @@ const path = require('path');
 const socketIO = require('socket.io');
 const { generateMessage, generateLocationMessage } = require('./utils/message');
 const { isRealString } = require('./utils/validation');
+const { Users } = require('./utils/users');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+const users = new Users();
 
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
-  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Chat App!'));
-  // broadcast to everyone on the connection but initiator
-  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user just joined the room'));
-  // listen for the client setting up room event
+
   socket.on('join', (params, callback) => {
-  // created validation function in utils
     if (!isRealString(params.name) || !isRealString(params.room)) {
-      callback('Name and room name are required');
+      return callback('Name and room name are required');
     }
+    socket.join(params.room);
+    users.removeUser(socket.id);
+    users.addUser(socket.id, params.name, params.room);
+
+    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Chat App!'));
+    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`));
+
     callback();
   });
   // our listener for the client createMessage event
@@ -31,11 +37,6 @@ io.on('connection', (socket) => {
     // message to everyone including initiator
     io.emit('newMessage', generateMessage(message.from, message.text));
     callback();
-  //   socket.broadcast.emit('newMessage', {
-  //     from: message.from,
-  //     text: message.text,
-  //     createdAt: new Date().getTime()
-  //   });
   });
 
   socket.on('createLocationMessage', (coords) => {
@@ -43,7 +44,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected from server');
+    const user = users.removeUser(socket.id);
+    // we only want to do something if we actually removed a user
+    if (user) {
+      io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left.`));
+    }
   });
 });
 
